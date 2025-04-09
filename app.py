@@ -190,10 +190,21 @@ elif options == "Modeling":
         from sklearn.model_selection import train_test_split
         from sklearn.linear_model import LinearRegression
         from sklearn.metrics import mean_squared_error, r2_score
+        import numpy as np
         
         # Prepare data
-        X = data[features]
-        y = data['total_amount']
+        X = data[features].copy()  # Create a copy to avoid modifying the original DataFrame
+        y = data['total_amount'].copy()  # Create a copy to avoid modifying the original Series
+        
+        # Handle NaN values
+        for col in X.columns:
+            if X[col].isnull().any():
+                X[col].fillna(X[col].mean(), inplace=True)  # Replace NaN with the mean
+        
+        # Handle infinite values
+        for col in X.columns:
+            if np.isinf(X[col]).any():
+                X[col].replace([np.inf, -np.inf], X[col][~np.isinf(X[col])].max(), inplace=True)  # Replace inf with max
         
         # Split data
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
