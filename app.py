@@ -241,3 +241,6 @@ elif options == "Modeling":
         ax.set_xlabel('Actual')
         ax.set_ylabel('Predicted')
         st.pyplot(fig)
+# Footer
+st.markdown("---")
+st.markdown("👨‍💻 Created by *Sidra Fatima*")
